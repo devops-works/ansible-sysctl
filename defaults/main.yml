@@ -1,0 +1,7 @@
+# Set sysctl entries like:
+# sysctl_entries:
+#   - net.foo.bar: baz
+#
+sysctl_entries: {}
+sysctl_module_config: {}
+sysctl_sysvalues: {}

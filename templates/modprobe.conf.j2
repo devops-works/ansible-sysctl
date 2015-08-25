@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+{% set __sysctl_mod_opts = [] %}
+{% for entry in item.value %}
+{%   for key, value in entry.iteritems() %}
+{%     set _= __sysctl_mod_opts.append(key+'='+value) %}
+{%   endfor %}
+{% endfor %}
+
+options {{ item.key  }} {{ __sysctl_mod_opts|join(' ') }}
+

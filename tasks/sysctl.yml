@@ -1,2 +1,23 @@
-- debug:
-    msg: "Placeholder for ansible-sysctl tasks"
+- debug: var=sysctl_entries
+
+- name: Sets sysctl entries
+  sysctl:
+    sysctl_file: /etc/sysctl.d/50-ansible.conf
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    reload: yes
+  with_dict: sysctl_entries
+
+- name: Sets sys entries
+  shell: "if [ `cat {{ item.key }}` -ne {{ item.value }} ]; then echo {{ item.value }} > {{ item.key }}; echo CHANGED; fi"
+  register: __sysctl_sys_entry
+  failed_when: false
+  changed_when: '"CHANGED" in __sysctl_sys_entry.stdout'
+  with_dict: sysctl_sysvalues
+
+- name: Sets module parameters at boot
+  template:
+    src: modprobe.conf.j2
+    dest: /etc/modprobe.d/{{ item.key }}.conf
+  with_dict: sysctl_module_config
