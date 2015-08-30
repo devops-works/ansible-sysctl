@@ -15,7 +15,7 @@
   with_dict: sysctl_sysvalues
 
 - name: Overrides start condition for procps
-  file: src=procps.override dest=/etc/init/procps.override
+  copy: src=procps.override dest=/etc/init/procps.override
 
 - name: Sets module parameters at boot
   template:
