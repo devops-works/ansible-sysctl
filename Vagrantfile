@@ -7,6 +7,7 @@ Vagrant.configure(2) do |config|
     v.memory = 1024
   end
 
+  config.vm.provision "shell", :inline => "sudo apt-get update && sudo apt-get -y upgrade"
   config.vm.provision "shell",
     :path => "tests/specs.sh",
     :upload_path => "/home/vagrant/specs",
