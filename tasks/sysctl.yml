@@ -5,14 +5,14 @@
     value: "{{ item.value }}"
     sysctl_set: yes
     reload: yes
-  with_dict: sysctl_entries
+  with_dict: "{{ sysctl_entries }}"
 
 - name: Sets sys entries
   shell: "if [ `cat {{ item.key }}` -ne {{ item.value }} ]; then echo {{ item.value }} > {{ item.key }}; echo CHANGED; fi"
   register: __sysctl_sys_entry
   failed_when: false
   changed_when: '"CHANGED" in __sysctl_sys_entry.stdout'
-  with_dict: sysctl_sysvalues
+  with_dict: "{{ sysctl_sysvalues }}"
 
 - name: Overrides start condition for procps
   copy: src=procps.override dest=/etc/init/procps.override
@@ -21,4 +21,4 @@
   template:
     src: modprobe.conf.j2
     dest: /etc/modprobe.d/{{ item.key }}.conf
-  with_dict: sysctl_module_config
+  with_dict: "{{ sysctl_module_config }}"
