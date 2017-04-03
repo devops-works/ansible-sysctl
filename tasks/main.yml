@@ -1,1 +1,2 @@
-- include: sysctl.yml tags=sysctl
+- include: sysctl.yml
+  tags: ["sysctl"]
