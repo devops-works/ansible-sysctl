@@ -16,7 +16,7 @@
 
 - name: Overrides start condition for procps
   copy: src=procps.override dest=/etc/init/procps.override
-  when: ansible_distribution_version|int < 18
+  when: ansible_distribution_version|int < 18 and ansible_distribution == 'Ubuntu'
 
 - name: Sets module parameters at boot
   template:
