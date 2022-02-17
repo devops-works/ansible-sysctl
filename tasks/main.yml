@@ -1,2 +1,7 @@
-- include_tasks: sysctl.yml
-  tags: ["sysctl"]
+---
+- include_tasks: 
+    file: sysctl.yml
+    apply:
+      tags: ["sysctl"]
+  tags:
+    - always
