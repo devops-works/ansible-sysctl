@@ -1,3 +1,4 @@
+---
 # Set sysctl entries like:
 # sysctl_entries:
 #   - net.foo.bar: baz

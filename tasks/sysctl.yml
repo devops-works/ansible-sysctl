@@ -1,25 +1,31 @@
+---
+# yamllint disable rule:line-length
 - name: Sets sysctl entries
-  sysctl:
+  ansible.posix.sysctl:
     sysctl_file: /etc/sysctl.d/50-ansible.conf
     name: "{{ item.key }}"
     value: "{{ item.value }}"
-    sysctl_set: yes
-    reload: yes
+    sysctl_set: true
+    reload: true
   with_dict: "{{ sysctl_entries }}"
 
 - name: Sets sys entries
-  shell: "if [ `cat {{ item.key }}` -ne {{ item.value }} ]; then echo {{ item.value }} > {{ item.key }}; echo CHANGED; fi"
+  ansible.builtin.shell: "if [ `cat {{ item.key }}` -ne {{ item.value }} ]; then echo {{ item.value }} > {{ item.key }}; echo CHANGED; fi"
   register: __sysctl_sys_entry
   failed_when: false
   changed_when: '"CHANGED" in __sysctl_sys_entry.stdout'
   with_dict: "{{ sysctl_sysvalues }}"
 
 - name: Overrides start condition for procps
-  copy: src=procps.override dest=/etc/init/procps.override
+  ansible.builtin.copy:
+    src: procps.override
+    dest: /etc/init/procps.override
+    mode: '0640'
   when: ansible_distribution_version|int < 18 and ansible_distribution == 'Ubuntu'
 
 - name: Sets module parameters at boot
-  template:
+  ansible.builtin.template:
     src: modprobe.conf.j2
     dest: /etc/modprobe.d/{{ item.key }}.conf
+    mode: '0640'
   with_dict: "{{ sysctl_module_config }}"

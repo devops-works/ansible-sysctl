@@ -1,5 +1,6 @@
 ---
-- include_tasks: 
+- name: Include sysctl tasks
+  ansible.builtin.include_tasks:
     file: sysctl.yml
     apply:
       tags: ["sysctl"]
