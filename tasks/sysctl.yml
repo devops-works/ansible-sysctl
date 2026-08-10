@@ -21,7 +21,7 @@
     src: procps.override
     dest: /etc/init/procps.override
     mode: '0640'
-  when: ansible_distribution_version|int < 18 and ansible_distribution == 'Ubuntu'
+  when: ansible_facts['distribution_version'] | int < 18 and ansible_facts['distribution'] == 'Ubuntu'
 
 - name: Sets module parameters at boot
   ansible.builtin.template:
